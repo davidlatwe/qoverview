@@ -101,8 +101,8 @@ class VerticalExtendedTreeView(QtWidgets.QTreeView):
         super(VerticalExtendedTreeView, self).keyboardSearch(string)
         self._on_key_search = False
 
-    def top_scrolled_index(self, value):
-        """Return the index of item that has scrolled in top of view"""
+    def top_scrolled_index(self, slider_pos):
+        """Return the index of item that has been scrolled of top of view"""
         row_unit = self.uniformed_row_height()
-        value = (value - self.verticalOffset()) / row_unit
+        value = (slider_pos - self.verticalOffset()) / row_unit
         return self.indexAt(QtCore.QPoint(0, value))
