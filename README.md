@@ -37,7 +37,7 @@ See `paintEvent` and you should get the picture. :relaxed:
 * Scroll mode must be `ScrollPerPixel`.
 * Size adjust policy must be `AdjustIgnored`.
 * Row height must be uniformed.
-* Scroll bar may flicker during window resizing.
+* ~~Scroll bar may flicker during window resizing.~~
 
 
 ### TODO
