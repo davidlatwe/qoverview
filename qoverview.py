@@ -36,10 +36,8 @@ class VerticalExtendedTreeView(QtWidgets.QTreeView):
         height = self.viewport().height()
         row_unit = self.uniformed_row_height()
         current_max = scroll.maximum()
-        if current_max:
-            self._extended = current_max + height - row_unit
-        else:
-            self._extended = 0
+
+        self._extended = current_max + height - row_unit
 
     def paintEvent(self, event):
         if self._extended is None:
@@ -50,7 +48,7 @@ class VerticalExtendedTreeView(QtWidgets.QTreeView):
             current_max = scroll.maximum()
 
             resized = self._extended != current_max
-            if resized:
+            if resized and current_max > 0:
                 scroll.setMaximum(self._extended)
                 scroll.setSliderPosition(self._pos)
             else:
@@ -58,14 +56,18 @@ class VerticalExtendedTreeView(QtWidgets.QTreeView):
 
         return super(VerticalExtendedTreeView, self).paintEvent(event)
 
+    def resizeEvent(self, event):
+        self.reset_extension()
+        return super(VerticalExtendedTreeView, self).resizeEvent(event)
+
     def setModel(self, model):
         super(VerticalExtendedTreeView, self).setModel(model)
         model.modelReset.connect(self.reset_extension)
 
     def uniformed_row_height(self):
         """Uniformed single row height, compute from first row and cached"""
-        if not self._row_height:
-            model = self.model()
+        model = self.model()
+        if model is not None and not self._row_height:
             first = model.index(0, 0)
             self._row_height = float(self.rowHeight(first))
         # cached
